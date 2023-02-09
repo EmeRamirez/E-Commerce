@@ -98,3 +98,15 @@
     color: rgb(224, 107, 107);
     padding-left: 1.2vw;
 }
+
+@media only screen and (max-width: 500px) {
+    .modal-content{
+        width:70vw;
+    }
+
+    .modal-dialog{
+        display: flex;
+        justify-content: center;
+    }
+
+}
