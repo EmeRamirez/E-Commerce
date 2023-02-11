@@ -54,14 +54,14 @@ function crearCards() {
 
     tienda.getProductos().forEach(el => {
         $('#contenedor-general').append(`
-            <div class="col mb-5 producto${el.id} ${el.cat} filtro-input" >
-                <div class="card h-100">
+            <div class="col mb-5 producto${el.id} ${el.cat} filtro-input">
+                <div class="card h-100 card-m">
                         <img class="card-img-top img${el.id}" id="img" src="${el.img}"/>
                         <!-- Product details-->
                         <div class="card-body p-3">
                             <div class="text-center">
                                 <!-- Product name-->
-                                <h5 class="fw-bolder" id="titulo">${el.nombre}</h5>                          
+                                <h5 class="fw-bolder card-titulo" id="titulo">${el.nombre}</h5>                          
                             </div>
                         </div>
                         <!-- Product actions-->
@@ -259,6 +259,8 @@ function pagar() {
 
 }
 
+// ENVIAR EMAIL
+
 function enviarMail() {
 
     let prodSinStock = '';
@@ -280,6 +282,8 @@ function enviarMail() {
     });
 };
 
+// BUSCA POR CATEGORÍA
+
 function getSelectedValue() {
     const selectValue = document.getElementById("list").value;
     const acceptedValues = ['clara', 'oscura'];
@@ -297,3 +301,22 @@ function getSelectedValue() {
       }
     })
   }
+
+  // LIVE SEARCH
+
+  const searchInput = document.getElementById("search-input");
+  const cardContainer = document.getElementById("contenedor-general");
+  const cards = cardContainer.getElementsByClassName("filtro-input");
+  
+  searchInput.addEventListener("input", function() {
+    const searchTerm = searchInput.value.toLowerCase();
+  
+    for (let i = 0; i < cards.length; i++) {
+      const cardText = cards[i].getElementsByClassName("card-titulo")[0];
+      if (cardText.innerText.toLowerCase().includes(searchTerm)) {
+        cards[i].classList.remove("hidden");
+      } else {
+        cards[i].classList.add("hidden");
+      }
+    }
+  });
