@@ -6,6 +6,8 @@ let listaCarritoMap;
 
 
 
+
+
 //Funcion para añadir formato CLP a los datos numéricos
 const formatoCL = new Intl.NumberFormat("es-CL", {
     style: "currency",
@@ -17,28 +19,40 @@ const formatoCL = new Intl.NumberFormat("es-CL", {
 
 //Al cargar la página añade la tienda al arreglo y le inserta los productos
 $(document).ready(function () {
-    
-    tienda = new Tienda('Tienda');
-
-    if (JSON.parse(localStorage.getItem("arr-carrito")) != null) {
-        listaCarrito = JSON.parse(localStorage.getItem("arr-carrito"));
-    }
-
-    if (JSON.parse(localStorage.getItem("arr-database")) != null) {
-        productDB = JSON.parse(localStorage.getItem("arr-database"));
-    }
 
 
+    //Este fetch trae la información del archivo .json y lo almacena en el arreglo 'productDB'
+    fetch('data/bd.json')
+    .then(response => response.json())
+    .then(json => {
+        // console.log(json);
+        productDB=json.productos;
+        console.log(productDB);
+    })
+    .then(()=>{
+            tienda = new Tienda('Tienda');
 
-    productDB.forEach(el => {
-        let producto = new Producto(el.id, el.nombre, el.precio, el.img, el.cat, el.stock);
-        tienda.setProductos(producto);
-    });
+        if (JSON.parse(localStorage.getItem("arr-carrito")) != null) {
+            listaCarrito = JSON.parse(localStorage.getItem("arr-carrito"));
+        }
 
-    listaCarritoMap = tienda.getProductos().map(object => ({ ...object }));
-    crearCards();
-    calcularMonto();
-    renderModal();
+        if (JSON.parse(localStorage.getItem("arr-database")) != null) {
+            productDB = JSON.parse(localStorage.getItem("arr-database"));
+        }
+
+
+        productDB.forEach(el => {
+            let producto = new Producto(el.id, el.nombre, el.precio, el.img, el.cat, el.stock);
+            tienda.setProductos(producto);
+        });
+
+        listaCarritoMap = tienda.getProductos().map(object => ({ ...object }));
+        crearCards();
+        calcularMonto();
+        renderModal();
+    })
+    .catch (err => console.log(err));
+  
 });
 
 
@@ -267,19 +281,24 @@ function enviarMail() {
     tienda.getProductos().forEach(el => {
         if (el.stock == 0) {
             prodSinStock = prodSinStock + `<li>${el.nombre}</li>`
-        }
-    })
-    console.log(prodSinStock);
 
-    var params = {
-        from_name: "The Chela Store",
-        email_id: "ventas@thechelastore.com",
-        arrsinstock: prodSinStock
-    }
-    emailjs.send("pago_stock", "template_gj4475e", params).then(function (res) {
-        console.log('Mail enviado' + res.status);
-        alert('Email Enviado! (Esto debería ser un modal más bonito jaja');
-    });
+            var params = {
+                from_name: "The Chela Store",
+                email_id: "ventas@thechelastore.com",
+                arrsinstock: prodSinStock
+            }
+            emailjs.send("pago_stock", "template_gj4475e", params).then(function (res) {
+                console.log('Mail enviado' + res.status);
+                alert('Email Enviado! (Esto debería ser un modal más bonito jaja');
+            });
+            
+        } else {
+            console.log('No hay productos sin stock');
+        }
+
+       
+    })
+     
 };
 
 // BUSCA POR CATEGORÍA
@@ -301,6 +320,7 @@ function getSelectedValue() {
       }
     })
   }
+<<<<<<< HEAD:mainES56.js
 
   // LIVE SEARCH
 
@@ -320,3 +340,18 @@ function getSelectedValue() {
       }
     }
   });
+=======
+  function getSelectRange(){
+    const selectRange = document.getElementById('range-filter').valueAsNumber;
+
+    tienda.getProductos().forEach(el => {
+        if (selectRange >= el.precio){
+            document.querySelector(`.producto${el.id}`).style.display='block'
+        }else {
+            document.querySelector(`.producto${el.id}`).style.display='none'
+        }
+        
+    } )
+
+} 
+>>>>>>> master:js/main.js
