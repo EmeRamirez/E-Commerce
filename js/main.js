@@ -320,7 +320,6 @@ function getSelectedValue() {
       }
     })
   }
-<<<<<<< HEAD:mainES56.js
 
   // LIVE SEARCH
 
@@ -340,7 +339,6 @@ function getSelectedValue() {
       }
     }
   });
-=======
   function getSelectRange(){
     const selectRange = document.getElementById('range-filter').valueAsNumber;
 
@@ -354,4 +352,3 @@ function getSelectedValue() {
     } )
 
 } 
->>>>>>> master:js/main.js
